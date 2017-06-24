@@ -60,3 +60,16 @@ class MachCommands(MachCommandBase):
         self._mach_context.commands.dispatch('lint', self._mach_context,
                                              linters=['eslint'], paths=paths,
                                              argv=extra_args, **kwargs)
+    @Command('flow', category='devenv',
+             description='Run facebook flow static checker')
+    @CommandArgument('paths', default=None, nargs='*',
+                     help="Paths to file or directories to lint, like "
+                          "'browser/' Defaults to the "
+                          "current directory if not given.")
+    @CommandArgument('extra_args', nargs=argparse.REMAINDER,
+                     help='Extra args that will be forwarded to eslint.')
+    def flow(self, *runargs, **lintargs):
+        """Run flow."""
+        self._mach_context.commands.dispatch('lint', self._mach_context,
+                                             linters=['flow'], paths=paths,
+                                             argv=extra_args, **kwargs)
