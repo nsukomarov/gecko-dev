@@ -1,4 +1,12 @@
 [ignore]
+.*/node_modules/.*
+.*/test/.*
+.*/tests/.*
+.*/testing/.*
+.*/test262/.*
+.*/addon-sdk/source/test/.*
+.*/servo/.*
+.*/obj-x86_64-pc-linux-gnu/.*
 
 [include]
 
