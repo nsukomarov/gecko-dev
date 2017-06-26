@@ -36,7 +36,7 @@ def lint(paths, config, binary=None, fix=None, setup=None, **lintargs):
 
     # TODO(komarov) add check that `$ flow` exitst
 
-    proc = ProcessHandler(["flow", "--json"], env=os.environ, stream=None, shell=False)
+    proc = ProcessHandler(["flow", "check", "--json", "--pretty"], env=os.environ, stream=None, shell=False)
     proc.run()
 
     try:
@@ -45,17 +45,30 @@ def lint(paths, config, binary=None, fix=None, setup=None, **lintargs):
         proc.kill()
         return [] # "FLOW was killed"
 
-    if not proc.output:
+    output = ''.join(proc.output)
+
+    if not output:
         return [] # "FLOW has silently quit"
 
-    output = proc.output[0]
     try:
         jsonresult = json.loads(output)
     except ValueError:
-        print(FLOW_ERROR_MESSAGE.format("\n".join(output)))
+        print(FLOW_ERROR_MESSAGE.format(output))
         return 1
 
-    # TODO(komarov) add results handler
+    results = []
+    errors = jsonresult['errors']
+    for err in errors:
+        for msg in err.get('message'):
+            source = '{path}:{line}:{start}'.format(path=msg['path'], line=str(msg['line']), start=str(msg['start']))
+            results.append("""
+                kind: {kind}
+                source: {source}
+                message: {message}
+                """.format(kind=err['kind'],
+                    source=source,
+                    message=msg['descr']))
 
+    return results
 
     return []
