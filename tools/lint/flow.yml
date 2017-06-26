@@ -1,4 +1,4 @@
-eslint:
+flow:
     description: JavaScript static type checker
     # Flow infra handles its own path filtering, so just include cwd
     include: ['.']
