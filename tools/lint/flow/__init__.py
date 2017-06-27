@@ -60,15 +60,13 @@ def lint(paths, config, binary=None, fix=None, setup=None, **lintargs):
     errors = jsonresult['errors']
     for err in errors:
         for msg in err.get('message'):
-            source = '{path}:{line}:{start}'.format(path=msg['path'], line=str(msg['line']), start=str(msg['start']))
-            results.append("""
-                kind: {kind}
-                source: {source}
-                message: {message}
-                """.format(kind=err['kind'],
-                    source=source,
-                    message=msg['descr']))
+            formattedError = {
+                'rule': err.get('kind'),
+                'level': err.get('level'),
+                'lineno': msg.get('line'),
+                'path': msg.get('path'),
+                'message': msg.get('descr'),
+            }
+            results.append(result.from_config(config, **formattedError))
 
     return results
-
-    return []
