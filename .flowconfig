@@ -9,6 +9,9 @@
 .*/obj-x86_64-pc-linux-gnu/.*
 
 [include]
+./browser/modules/*.jsm
+./browser/components/*.jsm
+./toolkit/modules/*.jsm
 
 [libs]
 
